@@ -66,6 +66,8 @@ flowchart TD
   - `state.tfvars`: backend key for dev state
 - `environments/prod/`: same pattern for prod
 - `Makefile`: one-command apply/destroy for dev/prod
+- `configure-prereqs.sh`: install/configure Terraform + AWS CLI + optional AWS profile (see below)
+- `check-prereqs.sh`: verify Terraform on `PATH` and AWS credentials (`sts get-caller-identity`)
 
 ## Prerequisites
 
@@ -76,6 +78,56 @@ flowchart TD
   - Route53 zone matching `dns_domain`
   - EC2/VPC resources in `ap-south-2`
 - SSH connectivity from Terraform runner to created EC2 private IPs (for `remote-exec`)
+
+### Configure prerequisites (automated)
+
+On **Linux** (RHEL/Ubuntu-style control host), you can install and wire basics with:
+
+```bash
+cd Terraform/wmp-terraform-v6
+chmod +x configure-prereqs.sh check-prereqs.sh
+./configure-prereqs.sh
+```
+
+What **`configure-prereqs.sh`** does:
+
+- Installs **Terraform** if missing (HashiCorp repo via `dnf` or `apt-get`).
+- Installs **AWS CLI v2** if missing (official bundle).
+- Optionally writes **`~/.aws/config`** / **`credentials`** for a named profile when you pass keys or set env vars.
+- Runs **`aws sts get-caller-identity`** using **`AWS_PROFILE`** (or `default`) when keys were configured.
+
+Examples:
+
+```bash
+# Defaults: profile from AWS_PROFILE or "default", region from AWS_REGION (script default if unset)
+./configure-prereqs.sh
+
+./configure-prereqs.sh --region ap-south-2
+
+./configure-prereqs.sh --profile devops --region ap-south-2 \
+  --aws-access-key-id AKIA... \
+  --aws-secret-access-key '...'
+```
+
+Same inputs via environment variables:
+
+```bash
+export AWS_PROFILE=devops
+export AWS_REGION=ap-south-2
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+./configure-prereqs.sh
+```
+
+If you **do not** pass keys, the script skips writing secrets and reminds you to run **`aws configure --profile <name>`** manually.
+
+After configuration (or if everything was already installed), validate without changing the system:
+
+```bash
+./check-prereqs.sh
+```
+
+**Windows note:** These scripts target a **Linux/macOS-style** shell. On Windows, run them in **WSL**, **Git Bash**, or your Terraform runner EC2 box—not plain `cmd.exe`.
 
 ## How to run
 
