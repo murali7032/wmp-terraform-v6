@@ -46,3 +46,5 @@ apps = {
   }
 
 }
+
+private_key_path = "~/wmp-terraform/mkreddy.pem"

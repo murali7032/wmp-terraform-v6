@@ -52,7 +52,7 @@ resource "null_resource" "ansible" {
       type     = "ssh"
       host     = aws_instance.main.private_ip
       user     = "ec2-user"
-      private_key = file(var.private_key_path)
+      private_key = file(pathexpand(var.private_key_path))
  
     }
     inline = [

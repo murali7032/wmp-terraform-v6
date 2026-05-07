@@ -73,6 +73,7 @@ flowchart TD
 
 - Terraform installed and available in `PATH`
 - AWS credentials configured locally (profile/env vars)
+- **SSH private key** on the machine running Terraform: set `private_key_path` in `environments/<env>/main.tfvars` (used by `remote-exec` to reach instances). Paths like `~/keys/id_rsa.pem` work thanks to `pathexpand()` in the module.
 - Access to:
   - S3 bucket `terraform-state-d88`
   - Route53 zone matching `dns_domain`
