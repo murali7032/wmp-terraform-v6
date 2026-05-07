@@ -1,4 +1,4 @@
-dns_domain = "raghudevopsb88.online."
+dns_domain = "devmonkey.online."
 env        = "prod"
 
 databases = {

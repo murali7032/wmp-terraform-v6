@@ -52,7 +52,8 @@ resource "null_resource" "ansible" {
       type     = "ssh"
       host     = aws_instance.main.private_ip
       user     = "ec2-user"
-      password = "DevOps321"
+      private_key = file(var.private_key_path)
+ 
     }
     inline = [
       "sudo labauto ansible",

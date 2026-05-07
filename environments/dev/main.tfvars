@@ -1,4 +1,4 @@
-dns_domain = "raghudevopsb88.online."
+dns_domain = "devmonkey.online."
 env        = "dev"
 
 databases = {
@@ -46,3 +46,6 @@ apps = {
   }
 
 }
+
+# private_key_path = "~/wmp-terraform-v6.pem"
+private_key_path = "~/wmp-terraform/mkreddy.pem"
