@@ -42,7 +42,7 @@ resource "aws_route53_record" "dns" {
   name    = "${var.component}-${var.env}"
   type    = "A"
   ttl     = 30
-  records = [aws_instance.main.private_ip]
+  records = [aws_instance.main.public_ip]
 }
 
 resource "null_resource" "ansible" {
@@ -50,7 +50,7 @@ resource "null_resource" "ansible" {
   provisioner "remote-exec" {
     connection {
       type     = "ssh"
-      host     = aws_instance.main.private_ip
+      host     = aws_instance.main.public_ip
       user     = "ec2-user"
       private_key = file(pathexpand(var.private_key_path))
  
